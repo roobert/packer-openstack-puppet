@@ -30,10 +30,7 @@
     {
       "type": "shell",
       "script": "scripts/openstack-puppet-client.sh",
-      "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} sudo -E -S sh '{{ .Path }}'",
-      "environment_vars": [
-        "PUPPETMASTER=192.168.113.184"
-      ]
+      "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} sudo -E -S sh '{{ .Path }}'"
     }
   ]
 }
