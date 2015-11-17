@@ -1,0 +1,39 @@
+{
+  "builders": [{
+    "type": "openstack",
+    "ssh_username": "debian",
+    "image_name": "debian-jessie-puppet-client",
+    "source_image": "7361359e-25c5-4fa6-b421-65884ccc0f16",
+    "floating_ip_pool": "ext-net",
+    "flavor": "3"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": [
+        "sudo install -o debian -g debian -d /var/lib/firstboot"
+      ]
+    },
+    {
+      "type": "file",
+      "source": "assets/",
+      "destination": "/var/lib/firstboot/"
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "sudo mv -v /var/lib/firstboot/firstboot.service /etc/systemd/system/",
+        "sudo systemctl enable firstboot"
+      ]
+    },
+    {
+      "type": "shell",
+      "script": "scripts/openstack-puppet-client.sh",
+      "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} sudo -E -S sh '{{ .Path }}'",
+      "environment_vars": [
+        "PUPPETMASTER=192.168.113.184"
+      ]
+    }
+  ]
+}
